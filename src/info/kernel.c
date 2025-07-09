@@ -4,7 +4,7 @@
 #include "info.h"
 
 Result getKernel() {
-    char buffer[32];
+    static char buffer[32];
     FILE* fptr = popen("uname -r", "r");
 
     if (fptr == NULL) {

@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+#include "info/info.h"
+
 int main(int argc, char *argv[]) {
-    printf("Hello world nya :3\n");
+    Result distro = getDistro();
+
+    printf("Distro: %s", (char*) distro.data);
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef RESULT_H
 #define RESULT_H
 
@@ -12,16 +14,19 @@ typedef struct {
     ResultType type;
 } Result_t;
 
-#define RESULT_OK() ((result_t) { OK })
-#define RESULT_ERR() ((result_t) { ERR })
+#define RESULT_OK() ((Result_t) { OK })
+#define RESULT_ERR() ((Result_t) { ERR })
 
 typedef struct {
     ResultType type;
-    char message[128];
+    union {
+        void* data;
+        char message[128];
+    };
 } Result;
 
-static inline Result ok() {
-    Result res = {.type = OK};
+static inline Result ok(void* data) {
+    Result res = {.type = OK, .data= data};
     return res;
 }
 

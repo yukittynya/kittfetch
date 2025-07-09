@@ -1,6 +1,7 @@
 To get distro
 
 cat /etc/*-release | grep NAME | head -n1 | cut -d '=' -f2
+cat /etc/*-release | grep NAME | head -n1 | cut -d '=' -f2
 
 use popen() to run cmds and return the output 
 https://www.baeldung.com/linux/c-code-execute-system-command

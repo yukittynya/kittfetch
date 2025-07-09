@@ -14,9 +14,6 @@ typedef struct {
     ResultType type;
 } Result_t;
 
-#define RESULT_OK() ((Result_t) { OK })
-#define RESULT_ERR() ((Result_t) { ERR })
-
 typedef struct {
     ResultType type;
     union {

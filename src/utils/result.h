@@ -12,10 +12,6 @@ typedef enum {
 
 typedef struct {
     ResultType type;
-} Result_t;
-
-typedef struct {
-    ResultType type;
     union {
         void* data;
         char message[128];

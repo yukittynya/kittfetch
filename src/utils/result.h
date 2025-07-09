@@ -34,8 +34,8 @@ static inline Result err(const char* msg) {
     return res;
 }
 
-#define IS_OK(result) ((result).type = OK)
-#define IS_ERR(result) ((result).type = ERR)
+#define IS_OK(result) ((result).type == OK)
+#define IS_ERR(result) ((result).type == ERR)
 #define ERR_MSG(result) ((result).message)
 
 #endif // !RESULT_H 

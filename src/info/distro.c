@@ -1,19 +1,39 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "info.h"
 
 Result getDistro() {
     static char buffer[32];
-    FILE* fptr = popen("cat /etc/*-release | grep NAME | head -n1 | cut -d '=' -f2 | tr -d '\"'", "r");
+    const char* releaseFiles[] = {
+        "/etc/os-release",
+        "/etc/lsb-release",
+        "/etc/arch-release",
+        "/etc/debian-release",
+        "/etc/redhat--release",
+        NULL
+    };
 
-    if (fptr == NULL) {
-        return err("ERROR: sysinfo/distro.c, popen() failed");
-    }
+    for (int i = 0; releaseFiles[i] != NULL; i++) {
+        FILE* fptr = fopen(releaseFiles[i], "r");
 
-    fgets(buffer, sizeof(buffer), fptr);
+        if (fptr) {
+            char line[256];
 
-    buffer[sizeof(buffer) - 1] = '\0';
+            while (fgets(line, sizeof(line), fptr)) {
+                if (strncmp(line, "NAME", 5)) {
+                    char* value = line + 6;
+                    value[strlen(value) - 2] = '\0';
 
-    pclose(fptr);
-    return ok(buffer);
+                    strncpy(buffer, value, sizeof(buffer) - 1);
+                    buffer[sizeof(buffer) - 1] = '\0';
+                    fclose(fptr);
+
+                    return ok(buffer);
+                }
+            }
+        }
+    } 
+
+    return err("Could not get distro");
 }

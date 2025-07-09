@@ -6,7 +6,7 @@
 Result getDistro();
 Result getKernel();
 Result getKernelVersion();
-Result getKernelVersionNumber();
+Result getKernelVersionRelease();
 Result getKernelPretty();
 
 #endif // !INFO_H

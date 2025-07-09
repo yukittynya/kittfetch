@@ -1,68 +1,79 @@
 #include <stdio.h>
-#include <string.h>
+#include <sys/utsname.h>
 
 #include "info.h"
 
 Result getKernel() {
     static char buffer[32];
-    FILE* fptr = popen("uname -r", "r");
+    struct utsname info;
 
-    if (fptr == NULL) {
-         return err("ERROR: info/kernel.c popen()");
+    if (uname(&info) != 0) {
+        return err("ERROR - kernel.c in getKernel() ");
     }
 
-    fgets(buffer, sizeof(buffer), fptr);
-
-    buffer[sizeof(buffer) - 1] = '\0';
-
-    fclose(fptr);
+    snprintf(buffer, sizeof(buffer), "%s", info.release);
     return ok(buffer);
 }
 
 Result getKernelVersion() {
-    static char buffer[8];
-    FILE* fptr = popen("uname -r | rev | cut -d '-' -f1 | rev | sed 's/.*/\\u&/'", "r");
-
-    if (fptr == NULL) {
-         return err("ERROR: info/kernel.c popen()");
+    static char buffer[16];
+    struct utsname info;
+    
+    if (uname(&info) != 0) {
+        return err("ERROR - kernel.c in getKernelVersion() ");
     }
 
-    fgets(buffer, sizeof(buffer), fptr);
+    for (int i = strlen(info.release); i > 0; i--) {
+        if (info.release[i] == '-') {
+            char* line = info.release + i + 1;
 
-    buffer[sizeof(buffer) - 1] = '\0';
+            if (line[0] > 90) {
+                line[0] -= 32;
+            }
+            
+            snprintf(buffer, sizeof(buffer), "%s", line);
+            return ok(buffer);
+        }
+    }
 
-    pclose(fptr);
-    return ok(buffer);
+    return err("Not found");
+    
 }
 
-Result getKernelVersionNumber() {
-    static char buffer[8];
-    FILE* fptr = popen("uname -r | cut -d '-' -f1", "r");
-
-    if (fptr == NULL) {
-         return err("ERROR: info/kernel.c popen()");
+Result getKernelVersionRelease() {
+    static char buffer[16];
+    struct utsname info;
+    
+    if (uname(&info) != 0) {
+        return err("ERROR - kernel.c in getKernelVersionRelease() ");
     }
+    
+    char* dash = strchr(info.release, '-');
 
-    fgets(buffer, sizeof(buffer), fptr);
+    if (dash) {
+        size_t len = dash - info.release;
 
-    buffer[sizeof(buffer) - 1] = '\0';
-
-    pclose(fptr);
+        if (len < sizeof(buffer)) {
+            strncpy(buffer, info.release, len);
+            buffer[len] = '\0';
+        }
+    } else {
+        snprintf(buffer, sizeof(buffer), "%s", info.release);
+    }
+    
     return ok(buffer);
 }
 
 Result getKernelPretty() {
-    static char buffer[16] = "";
-
-    Result versionNumber = getKernelVersionNumber();
-    memmove(buffer + strlen(buffer), versionNumber.data, strlen(versionNumber.data) - 1);
-
-    strcat(buffer, " "); 
-
+    static char buffer[64];
+    
+    Result release = getKernelVersionRelease();
+    if (IS_ERR(release)) return release;
+    
     Result version = getKernelVersion();
-    memmove(buffer + strlen(buffer), version.data, strlen(version.data) - 1);
+    if (IS_ERR(version)) return version;
 
-    buffer[sizeof(buffer) - 1] = '\0';
-
+    snprintf(buffer, sizeof(buffer), "%s %s", (char*)release.data, (char*)version.data);
+    
     return ok(buffer);
 }

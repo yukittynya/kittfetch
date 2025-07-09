@@ -1,0 +1,43 @@
+#ifndef RESULT_H
+#define RESULT_H
+
+#include <string.h>
+
+typedef enum {
+    OK,
+    ERR
+} ResultType;
+
+typedef struct {
+    ResultType type;
+} Result_t;
+
+#define RESULT_OK() ((result_t) { OK })
+#define RESULT_ERR() ((result_t) { ERR })
+
+typedef struct {
+    ResultType type;
+    char message[128];
+} Result;
+
+static inline Result ok() {
+    Result res = {.type = OK};
+    return res;
+}
+
+static inline Result err(const char* msg) {
+    Result res = {.type = ERR};
+
+    if (msg) {
+        strncpy(res.message, msg, sizeof(res.message) - 1);
+    }
+
+    res.message[sizeof(res.message) - 1] = '\0';
+    return res;
+}
+
+#define IS_OK(result) ((result).type = OK)
+#define IS_ERR(result) ((result).type = ERR)
+#define ERR_MSG(result) ((result).message)
+
+#endif // !RESULT_H 

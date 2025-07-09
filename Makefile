@@ -15,5 +15,5 @@ clean :
 	rm -rvf build
 
 .PHONY = run
-run : kittfetch
+run : clean kittfetch
 	./build/bin/kittfetch

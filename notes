@@ -7,3 +7,24 @@ https://www.baeldung.com/linux/c-code-execute-system-command
 
 makefile
 https://linuxhandbook.com/using-make/#initial-draft-of-a-makefile
+
+What needs to be fetched?
+
+os:
+    distro, kernel
+
+cpu:
+    brand/model, cpu frequency, cpu core and thread count
+
+memory: 
+    max, in-use, percentage, free
+
+gpu: 
+    brand/model 
+
+
+For benchmarking :3
+
+time kittfetch >/dev/null
+
+bool_options & 2^n, for storing all bool options in a single uint32

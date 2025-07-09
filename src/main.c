@@ -4,6 +4,8 @@
 
 int main(int argc, char *argv[]) {
     Result distro = getDistro();
+    Result kernel = getKernelPretty();
 
-    printf("Distro: %s", (char*) distro.data);
+    printf("distro: %s", (char*) distro.data);
+    printf("kernel: %s", (char*) kernel.data);
 }

@@ -13,6 +13,7 @@ git add src/utils/result.h
 # info/
 git add src/info/info.h
 git add src/info/distro.c
+git add src/info/kernel.c
 
 echo "Message qt3.14?"
 read msg 

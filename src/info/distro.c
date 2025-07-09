@@ -1,10 +1,9 @@
 #include <stdio.h>
 
 #include "info.h"
-#include "../utils/result.h"
 
 Result getDistro() {
-    char buffer[64];
+    static char buffer[32];
     FILE* fptr = popen("cat /etc/*-release | grep NAME | head -n1 | cut -d '=' -f2 | tr -d '\"'", "r");
 
     if (fptr == NULL) {
@@ -12,6 +11,8 @@ Result getDistro() {
     }
 
     fgets(buffer, sizeof(buffer), fptr);
+
+    buffer[sizeof(buffer) - 1] = '\0';
 
     pclose(fptr);
     return ok(buffer);

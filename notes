@@ -1,0 +1,9 @@
+To get distro
+
+cat /etc/*-release | grep NAME | head -n1 | cut -d '=' -f2
+
+use popen() to run cmds and return the output 
+https://www.baeldung.com/linux/c-code-execute-system-command
+
+makefile
+https://linuxhandbook.com/using-make/#initial-draft-of-a-makefile

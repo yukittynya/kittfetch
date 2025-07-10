@@ -11,9 +11,9 @@ git add src/main.c
 git add src/utils/result.h 
 
 # info/
-git add src/info/info.h
-git add src/info/distro.c
-git add src/info/kernel.c
+git add src/modules/modules.h
+git add src/modules/distro.c
+git add src/modules/kernel.c
 
 echo "Message qt3.14?"
 read msg 

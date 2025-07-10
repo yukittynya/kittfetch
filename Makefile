@@ -1,4 +1,4 @@
-CFLAGS = -Werror -O1
+CFLAGS = -Werror -O3 -ffast-math -flto
 CC = clang 
 VPATH = src:src/info:build:build/bin
 

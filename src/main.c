@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "info/info.h"
+#include "modules/modules.h"
 
 int main(int argc, char *argv[]) {
     Result distro = getDistro();
